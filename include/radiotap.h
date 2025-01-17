@@ -1,3 +1,6 @@
+#ifndef RADIOTAP_H
+#define RADIOTAP_H
+
 #include <cstdint>
 #include <vector>
 
@@ -64,3 +67,5 @@ public:
         return bytes;
     }
 };
+
+#endif // RADIOTAP_H

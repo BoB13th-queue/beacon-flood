@@ -1,3 +1,6 @@
+#ifndef TAGEDPARAM_H
+#define TAGEDPARAM_H
+
 #include <vector>
 #include <cstdint>
 
@@ -51,3 +54,5 @@ public:
         return bytes;
     }
 };
+
+#endif // TAGEDPARAM_H

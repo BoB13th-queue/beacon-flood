@@ -1,6 +1,8 @@
 #include <iostream>
 #include <cstdlib>
+
 #include "beacon_flood.h"
+#include "beaconpacket.h"
 
 using namespace std;
 
@@ -29,12 +31,12 @@ int main(int argc, char* argv[]) {
     for (const auto &ssid : ssids) {
         cout << "    - " << ssid << endl;
     }
-    
-    cout << "[*] Starting Beacon Flood on interface: " << iface << endl;
 
-    // Beacon Flood 시작 (무한루프)
-    // 별도 스레드로 돌리고 싶다면 thread 등을 사용해도 됨.
-    start_beacon_flood(iface, ssids);
+    cout << "[*] Starting Beacon Flood on interface: " << iface << endl;
+    
+    vector<BeaconPacket> beaconList;
+    
+    start_beacon_flood(iface, beaconList);
 
     return 0;
 }

@@ -1,3 +1,6 @@
+#ifndef BEACONFRAME_H
+#define BEACONFRAME_H
+
 #include <cstdint>
 #include <vector>
 #include <string>
@@ -111,3 +114,5 @@ public:
 
     
 };
+
+#endif // BEACONFRAME_H
