@@ -44,13 +44,13 @@ vector<string> load_ssid_list(const string &filename) {
     return ssids;
 }
 
-void start_beacon_flood(const std::string &ifname,
-                        const std::vector<std::string> &ssids)
+void start_beacon_flood(const string &ifname,
+                        const vector<string> &ssids)
 {
     char errbuf[PCAP_ERRBUF_SIZE];
     pcap_t* handle = pcap_open_live(ifname.c_str(), 1024, 1, 1000, errbuf);
     if (!handle) {
-        std::cerr << "pcap_open_live(" << ifname << ") failed: " << errbuf << std::endl;
+        cerr << "pcap_open_live(" << ifname << ") failed: " << errbuf << endl;
         return;
     }
 
@@ -63,10 +63,10 @@ void start_beacon_flood(const std::string &ifname,
     while (true) {
         for (auto &ssid : ssids) {
             // 1) Radiotap 헤더
-            std::vector<uint8_t> packet = radiotap.toBytes();
+            vector<uint8_t> packet = radiotap.toBytes();
 
             // 2) 802.11 Beacon 헤더
-            std::vector<uint8_t> beacon_hdr = beacon.toBytes();
+            vector<uint8_t> beacon_hdr = beacon.toBytes();
             packet.insert(packet.end(), beacon_hdr.begin(), beacon_hdr.end());
 
             // 3) SSID 태그 (Tag=0, Length=SSID 길이, SSID 자체)
@@ -83,12 +83,16 @@ void start_beacon_flood(const std::string &ifname,
             auto rates_bytes = rates.toBytes();
             packet.insert(packet.end(), rates_bytes.begin(), rates_bytes.end());
 
+            beacon.setRandomBssid(); // Random BSSID
+
             // 5) 전송
             if (pcap_sendpacket(handle, packet.data(), packet.size()) != 0) {
-                std::cerr << "[!] pcap_sendpacket error: "
-                          << pcap_geterr(handle) << std::endl;
+                cerr << "[!] pcap_sendpacket error: "
+                          << pcap_geterr(handle) << endl;
             } else {
-                std::cout << "[DEBUG] Sent Beacon: SSID=" << ssid << std::endl;
+                string bssidStr = beacon.getBssidString();
+                cout << "[DEBUG] Sent Beacon: BSSID=" << bssidStr
+                        << ", SSID=" << ssid << endl;
             }
         }
         usleep(10000); // 10ms

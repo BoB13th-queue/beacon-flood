@@ -1,8 +1,26 @@
 #include <cstdint>
 #include <vector>
+#include <string>
 #include <cstring> // memcpy 등
 
+using namespace std;
+
 class BeaconFrameHeader {
+private:
+    void string2array(const string &str, uint8_t *arr) {
+        for (int i = 0; i < 6; i++) {
+            arr[i] = static_cast<uint8_t>(stoi(str.substr(i * 3, 2), nullptr, 16));
+        }
+    }
+
+    string macArrayToString(const uint8_t mac[6]) const {
+        char buf[18];
+        // 대문자/소문자 취향껏
+        sprintf(buf, "%02X:%02X:%02X:%02X:%02X:%02X",
+                mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
+        return string(buf);
+    }
+
 public:
     // (A) 802.11 무선 헤더 (Management/Beacon)
     uint16_t frame_control;    // ex: 0x0080 (리틀엔디안으로는 0x80, 0x00)
@@ -38,12 +56,22 @@ public:
 
     // BSSID, SA, DA 등을 바꾸고 싶다면 세터 함수를 제공하면 됨
     void setBssid(const uint8_t bssid_[6]) { memcpy(bssid, bssid_, 6); }
+    void setBssid(const string &bssid_)    { string2array(bssid_, bssid); }
+    void setRandomBssid() {
+        for (int i = 0; i < 6; i++) bssid[i] = static_cast<uint8_t>(rand() % 256);
+    }
     void setSa(const uint8_t sa_[6])       { memcpy(sa, sa_, 6);       }
+    void setSa(const string &sa_) { string2array(sa_, sa); }
     void setDa(const uint8_t da_[6])       { memcpy(da, da_, 6);       }
+    void setDa(const string &da_) { string2array(da_, da); }
+
+    string getBssidString() const { return macArrayToString(bssid); }
+    string getSaString() const { return macArrayToString(sa); }
+    string getDaString() const { return macArrayToString(da);}
 
     // 최종 바이트 배열로 직렬화
-    std::vector<uint8_t> toBytes() const {
-        std::vector<uint8_t> bytes;
+    vector<uint8_t> toBytes() const {
+        vector<uint8_t> bytes;
         bytes.reserve(36);
 
         // (A) 무선 헤더 24바이트
@@ -80,4 +108,6 @@ public:
 
         return bytes;
     }
+
+    
 };

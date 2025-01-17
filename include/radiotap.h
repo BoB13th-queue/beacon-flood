@@ -1,6 +1,8 @@
 #include <cstdint>
 #include <vector>
 
+using namespace std;
+
 class RadiotapHeader {
 public:
     // [필드] radiotap version, pad
@@ -23,17 +25,17 @@ public:
     RadiotapHeader() {
         it_version = 0x00;
         it_pad     = 0x00;
-        it_len     = 0x000c; // 12(0x0c)라고 되어 있지만 실제로는 13바이트가 됨에 유의
-        it_present = 0x00008004; // 0x04, 0x80, 0x00, 0x00 (Little Endian 변환 주의)
+        it_len     = 0x000c; // 12바이트
+        it_present = 0x00008004;
 
         flags      = 0x02;   // preamble
         tx_flags   = 0x0000;
-        padding    = 0x0000; // 마지막 2바이트
+        padding    = 0x0000;
     }
 
     // radiotap_header를 바이트 벡터로 직렬화
-    std::vector<uint8_t> toBytes() const {
-        std::vector<uint8_t> bytes;
+    vector<uint8_t> toBytes() const {
+        vector<uint8_t> bytes;
         // 1) 버전, pad
         bytes.push_back(it_version);
         bytes.push_back(it_pad);
