@@ -3,9 +3,14 @@
 
 #include <string>
 #include <vector>
+#include <cstdint>
 
-std::vector<std::string> load_ssid_list(const std::string &filename);
+using namespace std;
 
-void start_beacon_flood(const std::string &ifname, const std::vector<std::string> &ssids);
+string mac_to_string(const uint8_t mac[6]);
+
+vector<string> load_ssid_list(const string &filename);
+
+void start_beacon_flood(const string &ifname, const vector<string> &ssids);
 
 #endif // BEACON_FLOOD_H
