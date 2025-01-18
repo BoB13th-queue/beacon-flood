@@ -18,9 +18,6 @@
 
 using namespace std;
 
-/**
- * @brief 6바이트 MAC 배열을 "xx:xx:xx:xx:xx:xx" 형태의 문자열로 변환
- */
 string mac_to_string(const uint8_t mac[6]) {
     ostringstream oss;
     // 1바이트째는 바로 출력
@@ -32,9 +29,6 @@ string mac_to_string(const uint8_t mac[6]) {
     return oss.str();
 }
 
-/**
- * @brief 파일에서 SSID 목록을 한 줄씩 읽어 vector로 반환
- */
 vector<string> load_ssid_list(const string &filename) {
     vector<string> ssids;
     ifstream ifs(filename);
@@ -52,10 +46,6 @@ vector<string> load_ssid_list(const string &filename) {
     return ssids;
 }
 
-/**
- * @brief 주어진 BeaconPacket 리스트를 무한 반복 전송
- *        실제 구현 시에는 종료 조건(예: 키 입력, 신호 처리 등)을 넣어주어야 할 수도 있음
- */
 void start_beacon_flood(const string &ifname,
                         const vector<BeaconPacket> &beaconList)
 {
@@ -68,7 +58,7 @@ void start_beacon_flood(const string &ifname,
     }
 
     while (true) {
-        for (const auto &bp : beaconList) {
+        for (auto &bp : beaconList) {
             // 1) 직렬화
             vector<uint8_t> packet = bp.toBytes();
 
@@ -84,8 +74,6 @@ void start_beacon_flood(const string &ifname,
             }
         }
 
-        // 10ms(0.01초) 지연 -> CPU 과부하 방지
-        // C++11 방식 예시: this_thread::sleep_for(chrono::milliseconds(10));
         usleep(10000);
     }
 

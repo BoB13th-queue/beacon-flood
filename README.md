@@ -5,6 +5,11 @@ Beacon Flooding Attack 프로그램을 제작하라.
 ## 실행
 syntax : beacon-flood <interface> <ssid-list-file>
 sample : beacon-flood mon0 ssid-list.txt
+
+## 결과
+![set](./img/set.png)
+![show](./img/show.png)
+
 ## 상세
 libtins를 설치하고 예제를 직접 따라해 보면서 사용 방법을 익힌다.
 ```sh

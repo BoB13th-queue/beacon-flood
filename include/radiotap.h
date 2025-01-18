@@ -31,7 +31,6 @@ public:
         //    bit1 → 0x00000002, bit15 → 0x00008000 → 합치면 0x00008002
         it_present = 0x00008002;
 
-        // 필드 값 예시 (과제/상황에 맞게 조정)
         flags          = 0x02;   // 예) short preamble
         alignment_pad  = 0x00;   // 항상 0으로 채워도 됨
         tx_flags       = 0x0000; // TxFlags 관련 설정값
